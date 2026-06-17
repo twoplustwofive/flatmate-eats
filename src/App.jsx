@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Papa from 'papaparse';
-import { toPng } from 'html-to-image';
+import { toJpeg } from 'html-to-image';
 import { RefreshCw, ChevronDown, ChevronUp, Download, Share2 } from 'lucide-react';
 
 /* ── fallback data ────────────────────────────────────────────── */
@@ -453,9 +453,10 @@ export default function App() {
       // Small delay to let the share preview render fully
       await new Promise((r) => setTimeout(r, 100));
 
-      const dataUrl = await toPng(shareRef.current, {
+      const dataUrl = await toJpeg(shareRef.current, {
         cacheBust: true,
-        pixelRatio: 3, // Increased from 2 to 3 for higher quality
+        pixelRatio: 1.5, // Reduced from 3 to 1.5 to prevent crashes (base layout is already huge 880px)
+        quality: 0.9, // 90% JPEG compression is fast and retains text crispness
         backgroundColor: '#F2EEE5',
       });
 
@@ -463,8 +464,8 @@ export default function App() {
       if (navigator.share && navigator.canShare) {
         const response = await fetch(dataUrl);
         const blob = await response.blob();
-        const file = new File([blob], 'flatmate-eats-meal-plan.png', {
-          type: 'image/png',
+        const file = new File([blob], 'flatmate-eats-meal-plan.jpg', {
+          type: 'image/jpeg',
         });
 
         if (navigator.canShare({ files: [file] })) {
@@ -480,7 +481,7 @@ export default function App() {
 
       // Fallback: download the image if sharing API isn't available
       const link = document.createElement('a');
-      link.download = 'flatmate-eats-meal-plan.png';
+      link.download = 'flatmate-eats-meal-plan.jpg';
       link.href = dataUrl;
       link.click();
     } catch (err) {
