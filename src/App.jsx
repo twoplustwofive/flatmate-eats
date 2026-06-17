@@ -59,12 +59,14 @@ function generatePlan(breakfasts, mains) {
 }
 
 // Better generation that guarantees lunch ≠ dinner per day
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
 function generatePlanSafe(breakfasts, mains) {
   return Array.from({ length: 6 }, (_, i) => {
     const bf = pickRandom(breakfasts, 1)[0];
     const [lunch, dinner] = pickRandom(mains, Math.min(2, mains.length));
     return {
-      day: i + 1,
+      day: DAYS[i],
       breakfast: bf,
       lunch,
       dinner: dinner || lunch, // fallback if only 1 main
@@ -105,7 +107,7 @@ function MealRow({ emoji, label, dish, tagColor }) {
 }
 
 function DayCard({ dayNum, meals, isOpen, onToggle }) {
-  const padded = String(dayNum).padStart(2, '0');
+  const padded = typeof dayNum === 'string' ? dayNum.substring(0, 3).toUpperCase() : String(dayNum).padStart(2, '0');
 
   return (
     <div
@@ -118,15 +120,14 @@ function DayCard({ dayNum, meals, isOpen, onToggle }) {
         className="w-full flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 cursor-pointer group"
       >
         <div className="flex items-center gap-3 sm:gap-4">
-          {/* numeric badge */}
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#A3B18A] flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#A3B18A] flex items-center justify-center text-white font-bold text-xs sm:text-sm tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105">
             {padded}
           </div>
           <span
             className="text-[#3D3A35] text-lg sm:text-xl font-semibold"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
-            Day {dayNum}
+            {dayNum}
           </span>
         </div>
 
@@ -253,7 +254,7 @@ function SharePreview({ plan }) {
       <div style={{ padding: '16px 16px 20px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {plan.map((dayPlan) => {
-            const padded = String(dayPlan.day).padStart(2, '0');
+            const padded = typeof dayPlan.day === 'string' ? dayPlan.day.substring(0, 3).toUpperCase() : String(dayPlan.day).padStart(2, '0');
             return (
               <div
                 key={dayPlan.day}
@@ -291,7 +292,7 @@ function SharePreview({ plan }) {
                     {padded}
                   </div>
                   <span style={{ fontSize: '16px', fontWeight: 600 }}>
-                    Day {dayPlan.day}
+                    {dayPlan.day}
                   </span>
                 </div>
 
@@ -428,7 +429,7 @@ export default function App() {
 
     const newPlan = generatePlanSafe(breakfasts, mains);
     setPlan(newPlan);
-    setOpenDay(1);
+    setOpenDay('Monday');
     setLoading(false);
     // keep spinning a tiny bit longer for the animation feel
     setTimeout(() => setSpinning(false), 600);
@@ -583,10 +584,9 @@ export default function App() {
 
       {/* ── Footer ─────────────────────────────────────────────── */}
       <footer className="max-w-xl mx-auto px-6 pb-8 pt-2">
-        <p className="text-center text-xs text-[#3D3A35]/50 leading-relaxed">
+        <p className="text-center text-xs text-[#3D3A35]/50 leading-relaxed mb-3">
           This app is connected to your Google Sheet. Ensure your sheet has
-          these exact column headers:{' '}
-          <strong className="text-[#3D3A35]/70">Type</strong> (e.g. Breakfast
+          these exact column headers: <strong className="text-[#3D3A35]/70">Type</strong> (e.g. Breakfast
           or Main) and <strong className="text-[#3D3A35]/70">Dish</strong>.
           If empty, default meals are shown.{' '}
           <a
@@ -597,6 +597,9 @@ export default function App() {
           >
             Edit your Google Sheet →
           </a>
+        </p>
+        <p className="text-center text-xs text-[#3D3A35]/50 font-medium">
+          Made by <a href="https://www.linkedin.com/in/vijay-rathod/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#3D3A35] transition-colors">Vijay</a>
         </p>
       </footer>
 
