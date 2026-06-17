@@ -409,15 +409,14 @@ export default function App() {
         const sheetMains = [];
 
         parsed.data.forEach((row) => {
-          // New format: 'Breakfast' column and 'Main' column
-          const breakfast = (row.Breakfast || '').trim();
-          const main = (row.Main || '').trim();
+          const type = (row.Type || '').trim();
+          const dish = (row.Dish || '').trim();
+          if (!dish) return;
 
-          if (breakfast) {
-            sheetBreakfasts.push(breakfast);
-          }
-          if (main) {
-            sheetMains.push(main);
+          if (/breakfast/i.test(type)) {
+            sheetBreakfasts.push(dish);
+          } else if (/main/i.test(type)) {
+            sheetMains.push(dish);
           }
         });
 
@@ -565,7 +564,8 @@ export default function App() {
       <footer className="max-w-xl mx-auto px-6 pb-8 pt-2">
         <p className="text-center text-xs text-[#3D3A35]/50 leading-relaxed mb-3">
           This app is connected to your Google Sheet. Ensure your sheet has
-          These exact column headers: <strong className="text-[#3D3A35]/70">Breakfast</strong> and <strong className="text-[#3D3A35]/70">Main</strong>.
+          these exact column headers: <strong className="text-[#3D3A35]/70">Type</strong> (e.g. Breakfast
+          or Main) and <strong className="text-[#3D3A35]/70">Dish</strong>.
           If empty, default meals are shown.{' '}
           <a
             href={SHEET_EDIT_URL}
