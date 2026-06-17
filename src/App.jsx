@@ -178,7 +178,7 @@ function SharePreview({ plan }) {
   return (
     <div
       style={{
-        width: '440px',
+        width: '880px',
         padding: '0',
         background: 'radial-gradient(circle at top right, #FDFBF7 0%, #F2EEE5 100%)',
         fontFamily: "'Inter', sans-serif",
@@ -189,7 +189,7 @@ function SharePreview({ plan }) {
       <div
         style={{
           background: '#A3B18A',
-          padding: '28px 24px',
+          padding: '56px 48px',
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden',
@@ -198,10 +198,10 @@ function SharePreview({ plan }) {
         <div
           style={{
             position: 'absolute',
-            top: '-40px',
-            left: '-40px',
-            width: '120px',
-            height: '120px',
+            top: '-80px',
+            left: '-80px',
+            width: '240px',
+            height: '240px',
             borderRadius: '50%',
             background: 'rgba(255,255,255,0.1)',
           }}
@@ -209,10 +209,10 @@ function SharePreview({ plan }) {
         <div
           style={{
             position: 'absolute',
-            bottom: '-20px',
-            right: '-20px',
-            width: '90px',
-            height: '90px',
+            bottom: '-40px',
+            right: '-40px',
+            width: '180px',
+            height: '180px',
             borderRadius: '50%',
             background: 'rgba(255,255,255,0.1)',
           }}
@@ -220,7 +220,7 @@ function SharePreview({ plan }) {
         <h2
           style={{
             color: 'white',
-            fontSize: '28px',
+            fontSize: '56px',
             fontWeight: 700,
             fontFamily: "'Playfair Display', serif",
             margin: 0,
@@ -233,9 +233,9 @@ function SharePreview({ plan }) {
         <p
           style={{
             color: 'rgba(255,255,255,0.9)',
-            fontSize: '12px',
+            fontSize: '24px',
             letterSpacing: '0.1em',
-            marginTop: '6px',
+            marginTop: '12px',
             fontWeight: 500,
             position: 'relative',
             zIndex: 1,
@@ -246,10 +246,10 @@ function SharePreview({ plan }) {
         <p
           style={{
             color: 'rgba(255,255,255,0.55)',
-            fontSize: '9px',
+            fontSize: '18px',
             textTransform: 'uppercase',
             letterSpacing: '0.3em',
-            marginTop: '3px',
+            marginTop: '6px',
             fontWeight: 500,
             position: 'relative',
             zIndex: 1,
@@ -260,8 +260,8 @@ function SharePreview({ plan }) {
       </div>
 
       {/* all days expanded */}
-      <div style={{ padding: '16px 16px 20px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ padding: '32px 32px 40px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {plan.map((dayPlan) => {
             const padded = typeof dayPlan.day === 'string' ? dayPlan.day.substring(0, 3).toUpperCase() : String(dayPlan.day).padStart(2, '0');
             return (
@@ -269,10 +269,10 @@ function SharePreview({ plan }) {
                 key={dayPlan.day}
                 style={{
                   background: 'white',
-                  borderRadius: '24px',
-                  border: '1px solid #E5E1D8',
+                  borderRadius: '48px',
+                  border: '2px solid #E5E1D8',
                   overflow: 'hidden',
-                  boxShadow: '0 4px 16px rgba(61,58,53,0.04)',
+                  boxShadow: '0 8px 32px rgba(61,58,53,0.04)',
                 }}
               >
                 {/* day header */}
@@ -280,14 +280,14 @@ function SharePreview({ plan }) {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    padding: '14px 18px',
+                    gap: '24px',
+                    padding: '28px 36px',
                   }}
                 >
                   <div
                     style={{
-                      width: '36px',
-                      height: '36px',
+                      width: '72px',
+                      height: '72px',
                       borderRadius: '50%',
                       background: '#A3B18A',
                       display: 'flex',
@@ -295,41 +295,41 @@ function SharePreview({ plan }) {
                       justifyContent: 'center',
                       color: 'white',
                       fontWeight: 700,
-                      fontSize: '13px',
+                      fontSize: '26px',
                     }}
                   >
                     {padded}
                   </div>
-                  <span style={{ fontSize: '16px', fontWeight: 600 }}>
+                  <span style={{ fontSize: '32px', fontWeight: 600 }}>
                     {dayPlan.day}
                   </span>
                 </div>
 
                 {/* meals */}
-                <div style={{ padding: '0 18px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ padding: '0 36px 32px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {MEAL_CONFIG.map((mc) => (
                     <div
                       key={mc.key}
                       style={{
                         background: '#F9F7F2',
-                        borderRadius: '20px',
-                        padding: '12px 14px',
+                        borderRadius: '40px',
+                        padding: '24px 28px',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px',
+                        gap: '24px',
                       }}
                     >
                       <div
                         style={{
-                          width: '38px',
-                          height: '38px',
+                          width: '76px',
+                          height: '76px',
                           borderRadius: '50%',
                           background: 'white',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '20px',
-                          border: '1px solid #E5E1D8',
+                          fontSize: '40px',
+                          border: '2px solid #E5E1D8',
                           flexShrink: 0,
                         }}
                       >
@@ -339,15 +339,15 @@ function SharePreview({ plan }) {
                         <span
                           style={{
                             display: 'inline-block',
-                            fontSize: '9px',
+                            fontSize: '18px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             letterSpacing: '0.15em',
                             color: mc.tagColor,
                             background: mc.tagColor + '1A',
-                            padding: '2px 8px',
+                            padding: '4px 16px',
                             borderRadius: '999px',
-                            marginBottom: '2px',
+                            marginBottom: '4px',
                           }}
                         >
                           {mc.label}
@@ -355,9 +355,10 @@ function SharePreview({ plan }) {
                         <p
                           style={{
                             margin: 0,
-                            fontSize: '14px',
+                            fontSize: '28px',
                             fontWeight: 600,
                             color: '#3D3A35',
+                            lineHeight: '1.3',
                           }}
                         >
                           {dayPlan[mc.key]}
@@ -375,9 +376,9 @@ function SharePreview({ plan }) {
         <p
           style={{
             textAlign: 'center',
-            fontSize: '10px',
+            fontSize: '20px',
             color: 'rgba(61,58,53,0.35)',
-            marginTop: '14px',
+            marginTop: '28px',
             fontWeight: 500,
           }}
         >
