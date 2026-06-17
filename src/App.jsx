@@ -107,7 +107,7 @@ function MealRow({ emoji, label, dish, tagColor }) {
         >
           {label}
         </span>
-        <p className="text-[#3D3A35] text-base sm:text-lg font-semibold truncate" style={{ fontFamily: "'Inter', sans-serif" }}>
+        <p className="text-[#3D3A35] text-base sm:text-lg font-semibold leading-snug" style={{ fontFamily: "'Inter', sans-serif" }}>
           {dish}
         </p>
       </div>
