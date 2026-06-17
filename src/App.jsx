@@ -459,13 +459,34 @@ export default function App() {
         backgroundColor: '#F2EEE5',
       });
 
-      // Directly download the image
+      // Try Web Share API first (mobile-friendly)
+      if (navigator.share && navigator.canShare) {
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'flatmate-eats-meal-plan.png', {
+          type: 'image/png',
+        });
+
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: 'Flatmate Eats — 3061, Sobha Classic',
+            text: 'Check out our meal plan for 3061, Sobha Classic!',
+            files: [file],
+          });
+          setSharing(false);
+          return;
+        }
+      }
+
+      // Fallback: download the image if sharing API isn't available
       const link = document.createElement('a');
       link.download = 'flatmate-eats-meal-plan.png';
       link.href = dataUrl;
       link.click();
     } catch (err) {
-      console.error('Download failed:', err);
+      if (err.name !== 'AbortError') {
+        console.error('Share failed:', err);
+      }
     } finally {
       setSharing(false);
     }
@@ -549,7 +570,7 @@ export default function App() {
             Generate New Plan
           </button>
 
-          {/* Download Button */}
+          {/* Share Button */}
           <button
             onClick={shareAsImage}
             disabled={loading || sharing || plan.length === 0}
@@ -558,12 +579,12 @@ export default function App() {
             {sharing ? (
               <>
                 <Download size={18} className="animate-bounce" />
-                Saving…
+                Sharing…
               </>
             ) : (
               <>
-                <Download size={18} />
-                Download
+                <Share2 size={18} />
+                Share
               </>
             )}
           </button>
