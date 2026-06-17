@@ -37,39 +37,48 @@ const SHEET_EDIT_URL =
   'https://docs.google.com/spreadsheets/d/17XgBDHrLQVbAAvqVCLTFzZSrZ_WNRypatkeZuEPcxco/edit';
 
 /* ── helpers ──────────────────────────────────────────────────── */
-function pickRandom(arr, count = 1) {
-  const shuffled = [...arr].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+function createDeck(items) {
+  let deck = [];
+  return function draw(count) {
+    const drawn = [];
+    for (let i = 0; i < count; i++) {
+      if (deck.length === 0) {
+        // Reshuffle when empty
+        deck = [...items].sort(() => Math.random() - 0.5);
+      }
+      drawn.push(deck.pop());
+    }
+    return drawn;
+  };
 }
 
-function generatePlan(breakfasts, mains) {
-  return Array.from({ length: 6 }, (_, i) => ({
-    day: i + 1,
-    breakfast: pickRandom(breakfasts, 1)[0],
-    lunch: (() => {
-      const [a, b] = pickRandom(mains, 2);
-      return a;
-    })(),
-    dinner: (() => {
-      // Ensure lunch and dinner are different
-      const [a, b] = pickRandom(mains, 2);
-      return b;
-    })(),
-  }));
-}
-
-// Better generation that guarantees lunch ≠ dinner per day
+// Better generation that guarantees lunch ≠ dinner per day, and minimizes repeats across days
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function generatePlanSafe(breakfasts, mains) {
+  const drawBreakfast = createDeck(breakfasts);
+  const drawMain = createDeck(mains);
+
   return Array.from({ length: 6 }, (_, i) => {
-    const bf = pickRandom(breakfasts, 1)[0];
-    const [lunch, dinner] = pickRandom(mains, Math.min(2, mains.length));
+    const [bf] = drawBreakfast(1);
+    
+    let [lunch, dinner] = drawMain(Math.min(2, mains.length));
+    
+    // Fallback if there's only 1 main in the whole sheet
+    if (!dinner) dinner = lunch;
+
+    // Edge case: if we drew the last item of a deck, and then the first item of a reshuffled deck,
+    // they could theoretically be the same item. If so, swap dinner with the next draw.
+    if (lunch === dinner && mains.length > 1) {
+       const [replacement] = drawMain(1);
+       dinner = replacement;
+    }
+
     return {
       day: DAYS[i],
       breakfast: bf,
       lunch,
-      dinner: dinner || lunch, // fallback if only 1 main
+      dinner,
     };
   });
 }
