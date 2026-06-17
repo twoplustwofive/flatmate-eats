@@ -445,39 +445,17 @@ export default function App() {
 
       const dataUrl = await toPng(shareRef.current, {
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 3, // Increased from 2 to 3 for higher quality
         backgroundColor: '#F2EEE5',
       });
 
-      // Try Web Share API first (mobile-friendly)
-      if (navigator.share && navigator.canShare) {
-        const response = await fetch(dataUrl);
-        const blob = await response.blob();
-        const file = new File([blob], 'flatmate-eats-meal-plan.png', {
-          type: 'image/png',
-        });
-
-        if (navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: 'Flatmate Eats — 3061, Sobha Classic',
-            text: 'Check out our meal plan for 3061, Sobha Classic!',
-            files: [file],
-          });
-          setSharing(false);
-          return;
-        }
-      }
-
-      // Fallback: download the image
+      // Directly download the image
       const link = document.createElement('a');
       link.download = 'flatmate-eats-meal-plan.png';
       link.href = dataUrl;
       link.click();
     } catch (err) {
-      // User may have cancelled the share dialog — that's fine
-      if (err.name !== 'AbortError') {
-        console.error('Share failed:', err);
-      }
+      console.error('Download failed:', err);
     } finally {
       setSharing(false);
     }
@@ -561,7 +539,7 @@ export default function App() {
             Generate New Plan
           </button>
 
-          {/* Share Button */}
+          {/* Download Button */}
           <button
             onClick={shareAsImage}
             disabled={loading || sharing || plan.length === 0}
@@ -574,8 +552,8 @@ export default function App() {
               </>
             ) : (
               <>
-                <Share2 size={18} />
-                Share
+                <Download size={18} />
+                Download
               </>
             )}
           </button>
